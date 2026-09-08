@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" role="img" aria-labelledby="title desc">
+  <title id="title">ESP32-S3 CP2112 Emulator Wiring Overview</title>
+  <desc id="desc">ESP32-S3 with GPIO8 SDA and GPIO9 SCL, each pulled up to 3.3 volts through 4.7 kOhm resistors and connected to the DJI Spark battery.</desc>
+  <style>
+    text { font-family: sans-serif; fill: #17212b; }
+    .box { fill: #f7fafc; stroke: #334e68; stroke-width: 3; }
+    .wire { fill: none; stroke: #168aad; stroke-width: 5; }
+    .power { fill: none; stroke: #d1495b; stroke-width: 5; }
+    .ground { fill: none; stroke: #425466; stroke-width: 5; }
+    .label { font-size: 22px; font-weight: 700; }
+    .small { font-size: 18px; }
+  </style>
+  <rect width="1000" height="560" fill="#eef4f7"/>
+  <text x="50" y="55" font-size="30" font-weight="700">ESP32-S3 / DJI Spark Battery</text>
+  <rect class="box" x="55" y="120" width="245" height="300" rx="10"/>
+  <text class="label" x="90" y="170">ESP32-S3</text>
+  <text class="small" x="90" y="240">GPIO8  = SDA</text>
+  <text class="small" x="90" y="315">GPIO9  = SCL</text>
+  <text class="small" x="90" y="390">GND</text>
+  <text class="small" x="205" y="112">3V3</text>
+  <rect class="box" x="680" y="120" width="260" height="300" rx="10"/>
+  <text class="label" x="730" y="170">Spark Battery</text>
+  <text class="small" x="745" y="240">SDA</text>
+  <text class="small" x="745" y="315">SCL</text>
+  <text class="small" x="745" y="390">- / GND</text>
+  <path class="wire" d="M300 230 H680"/>
+  <path class="wire" d="M300 305 H680"/>
+  <path class="ground" d="M300 380 H680"/>
+  <text class="label" x="380" y="220">SDA</text>
+  <text class="label" x="380" y="295">SCL</text>
+  <text class="label" x="430" y="372">GND</text>
+  <path class="power" d="M180 120 V95 H490 M490 95 H520 V160 M520 200 V230 M490 95 H570 V235 M570 275 V305"/>
+  <text class="label" x="400" y="80">3,3 V</text>
+  <rect x="505" y="160" width="30" height="40" fill="#fff3cd" stroke="#b7791f" stroke-width="2"/>
+  <rect x="555" y="235" width="30" height="40" fill="#fff3cd" stroke="#b7791f" stroke-width="2"/>
+  <text class="small" x="545" y="185">4,7 kOhm</text>
+  <text class="small" x="595" y="260">4,7 kOhm</text>
+  <text x="55" y="495" font-size="19" font-weight="700">Both pull-ups are mandatory: SDA and SCL each require 4.7 kOhm to 3.3 V.</text>
+  <text x="55" y="530" class="small">Use 3.3 V logic levels with the ESP32-S3. Not to scale.</text>
+</svg>

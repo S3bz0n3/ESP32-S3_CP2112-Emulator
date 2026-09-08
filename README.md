@@ -1,108 +1,121 @@
 # ESP32-S3 CP2112 Emulator
 
-Dieses Projekt emuliert einen **Silicon Labs CP2112 HID-to-SMBus-Adapter** mit
-einem ESP32-S3. Dadurch kann die **DJI Battery Killer GUI von mixeysan** mit
-einem ESP32-S3 kommunizieren, als wäre ein echter CP2112 angeschlossen.
+This project emulates a **Silicon Labs CP2112 HID-to-SMBus adapter** using an
+ESP32-S3. This allows the **DJI Battery Killer GUI by mixeysan** to communicate
+with an ESP32-S3 as if a real CP2112 were connected.
 
-Der Sketch ist für die Kommunikation mit dem DJI-BMS vorgesehen, zum Beispiel
-zum Zurücksetzen eines DJI-Spark-Akkus. Der ESP32-S3 übernimmt dabei die
-USB-HID-Schnittstelle des CP2112 und reicht die SMBus-/I²C-Transfers an das
-angeschlossene BMS weiter.
+The sketch is intended for communication with the DJI BMS, for example to reset
+a DJI Spark battery. The ESP32-S3 provides the CP2112 USB HID interface and
+forwards SMBus/I²C transfers to the connected BMS.
 
-Das Projekt wurde erfolgreich mit Akkus der **DJI Spark** getestet. Dabei kam
-die DJI Battery Killer GUI mit dem Versionshinweis **„compiled 13.06.2021“**
-zum Einsatz.
+The project has been successfully tested with **DJI Spark** batteries using the
+DJI Battery Killer GUI displaying **"compiled 13.06.2021"**.
 
-## Funktionen
+## Features
 
-- USB-HID-Emulation des CP2112
-- CP2112-kompatible USB-Kennung: `VID 10C4`, `PID EA90`
-- SMBus-/I²C-Transfers für Lesen, Schreiben und Schreiben/Lesen
-- Konfigurierbare Busgeschwindigkeit über die HID-Kommandos der GUI
-- Serielle Debug-Ausgaben für USB-, I²C- und Transferstatus
+- CP2112 USB HID emulation
+- CP2112-compatible USB identification: `VID 10C4`, `PID EA90`
+- SMBus/I²C transfers for read, write, and write/read operations
+- Configurable bus speed through the GUI HID commands
+- Serial debug output for USB, I²C, and transfer status
 
-## Hardware und Verdrahtung
+## Hardware and Wiring
 
-| ESP32-S3 | Funktion |
+| ESP32-S3 | Function |
 | --- | --- |
 | GPIO8 | I²C/SMBus SDA |
 | GPIO9 | I²C/SMBus SCL |
-| GND | Gemeinsame Masse mit dem BMS |
+| GND | Common ground with the BMS |
 
-Die Pins sind im Sketch festgelegt:
+### Wiring Overview
+
+![Wiring overview for the ESP32-S3 and DJI Spark battery](docs/verdrahtung.svg)
+
+Both I²C lines must each be pulled up to `3.3 V` with a `4.7 kOhm` resistor:
+
+| Connection | Wiring |
+| --- | --- |
+| SDA / D | ESP32-S3 `GPIO8` to battery contact `D` (Data), with `4.7 kOhm` to `3.3 V` |
+| SCL / C | ESP32-S3 `GPIO9` to battery contact `C` (Clock), with `4.7 kOhm` to `3.3 V` |
+| Ground | ESP32-S3 `GND` to battery contact `-` / `GND` |
+| Supply | Connect battery contact `+` only as required by the intended circuit |
+
+### DJI Spark Battery: Contact Side
+
+![Schematic DJI Spark battery contact assignment](docs/spark-akku-pinout.svg)
+
+In the orientation shown, the battery contact side has six contacts:
+`C | - | + | + | - | D`. `C` denotes Clock (`SCL`) and `D` denotes Data
+(`SDA`). Verify the contact side and polarity on your own battery with a meter
+before connecting it. Never identify battery contacts by trial and error or by
+short-circuiting them.
+
+The pins are defined in the sketch:
 
 ```cpp
 #define I2C_SDA 8
 #define I2C_SCL 9
 ```
 
-Der Standardtakt beträgt `100 kHz`. SDA und SCL benötigen geeignete Pull-up-
-Widerstände auf die zulässige Signalspannung des angeschlossenen BMS. Der
-ESP32-S3 darf nicht direkt mit einer höheren Spannung als seiner zulässigen
-GPIO-Spannung verbunden werden. Bei abweichenden Pegeln ist ein passender
-Pegelwandler zu verwenden.
+The default bus speed is `100 kHz`. Both I²C lines, SDA and SCL, must each be
+pulled up to `3.3 V` with a `4.7 kOhm` resistor. Do not connect the ESP32-S3
+directly to a voltage higher than its permitted GPIO voltage. Use an appropriate
+level shifter for different voltage levels.
 
-## Voraussetzungen
+## Requirements
 
-- ESP32-S3-Board mit nutzbarem nativen USB-Anschluss
-- Arduino IDE oder Arduino CLI
+- ESP32-S3 board with an available native USB port
+- Arduino IDE or Arduino CLI
 - ESP32 Arduino Core **2.0.17**
-- **TinyUSB** für die native USB-HID-Kommunikation
-- DJI Battery Killer GUI von **mixeysan**
-- USB-Datenkabel
+- **TinyUSB** for native USB HID communication
+- DJI Battery Killer GUI by **mixeysan**
+- USB data cable
 
-`USB.h`, `USBHID.h`, `Wire.h` und `Arduino.h` werden vom ESP32-Arduino-Core
-bereitgestellt. Die USB-HID-Funktion nutzt TinyUSB; bei einer Installation des
-ESP32-Arduino-Cores 2.0.17 sind dafür normalerweise keine weiteren Bibliotheken
-erforderlich.
+`USB.h`, `USBHID.h`, `Wire.h`, and `Arduino.h` are provided by the ESP32 Arduino
+Core. USB HID uses TinyUSB; an ESP32 Arduino Core 2.0.17 installation normally
+requires no additional libraries for this.
 
-## Installation und Flashen
+## Installation and Flashing
 
-1. Dieses Repository herunterladen oder klonen.
-2. Die Datei `DJI_Battery_Killer_ESP32-S3-CP2112_Emulator.ino` in der Arduino
-	 IDE öffnen.
-3. Als Board das verwendete ESP32-S3-Board auswählen.
-4. Den richtigen USB-Port auswählen.
-5. Den Sketch kompilieren und auf den ESP32-S3 flashen.
-6. Den ESP32-S3 nach dem Flashen per USB mit dem Rechner verbinden.
+1. Download or clone this repository.
+2. Open `DJI_Battery_Killer_ESP32-S3-CP2112_Emulator.ino` in the Arduino IDE.
+3. Select the ESP32-S3 board you are using.
+4. Select the correct USB port.
+5. Compile and flash the sketch to the ESP32-S3.
+6. Connect the ESP32-S3 to the computer via USB after flashing.
 
-Nach dem Start sollte das Gerät als CP2112-kompatibles HID-Gerät erscheinen.
-Die DJI Battery Killer GUI kann anschließend dieses USB-Gerät für die
-Kommunikation mit dem BMS verwenden.
+After startup, the device should appear as a CP2112-compatible HID device. The
+DJI Battery Killer GUI can then use this USB device to communicate with the BMS.
 
-## Serielle Diagnose
+## Serial Diagnostics
 
-Der Sketch schreibt Diagnosemeldungen mit `115200 Baud` über die serielle
-Schnittstelle. Beim Start werden unter anderem die I²C-Pins und die USB-
-Kennung ausgegeben. Zusätzlich werden HID-Reports sowie Lese-, Schreib- und
-Statusoperationen protokolliert.
+The sketch outputs diagnostic messages at `115200 baud` over the serial
+interface. At startup, it reports the I²C pins and USB identification. HID
+reports as well as read, write, and status operations are also logged.
 
-Wenn die Diagnose nicht benötigt wird, kann sie im Sketch über folgende Zeile
-deaktiviert werden:
+If diagnostics are not required, disable them in the sketch with:
 
 ```cpp
 #define DEBUG_SERIAL 0
 ```
 
-## Hinweise zur Verwendung
+## Usage Notes
 
-- Die I²C-/SMBus-Adresse und weitere SMBus-Parameter werden normalerweise von
-	der GUI über die CP2112-HID-Kommandos gesetzt.
-- Der ESP32-S3 muss während der Kommunikation stabil über USB versorgt sein.
-- USB-HID-Verarbeitung und Transferstatus werden vom Sketch kontinuierlich
-	bearbeitet; der Haupt-Loop sollte deshalb nicht mit langen Verzögerungen
-	erweitert werden.
+- The I²C/SMBus address and other SMBus parameters are normally set by the GUI
+  through the CP2112 HID commands.
+- The ESP32-S3 must receive stable USB power during communication.
+- USB HID processing and transfer status are handled continuously by the sketch;
+  avoid adding long delays to the main loop.
 
-## Sicherheit
+## Safety
 
-Arbeiten an DJI-Akkus und deren BMS können Kurzschluss-, Brand- und
-Beschädigungsgefahr verursachen. Nur mit geeigneter Strombegrenzung, isolierter
-Verdrahtung und ausreichendem Fachwissen arbeiten. Akku und BMS niemals
-unbeaufsichtigt betreiben und die Pinbelegung des konkreten Akkus vor dem
-Anschluss prüfen.
+Working with DJI batteries and their BMS can cause short circuits, fire, and
+damage. Work only with suitable current limiting, insulated wiring, and
+sufficient technical knowledge. Never operate the battery and BMS unattended,
+and verify the pinout of the specific battery before connecting it.
 
-## Lizenz
+## License
 
-In diesem Repository ist derzeit keine separate Lizenzdatei enthalten. Bitte
-vor einer Weitergabe die Lizenzbedingungen des ursprünglichen Projekts und der
-DJI Battery Killer GUI von mixeysan prüfen.
+This repository currently contains no separate license file. Before
+redistributing it, check the license terms of the original project and the DJI
+Battery Killer GUI by mixeysan.

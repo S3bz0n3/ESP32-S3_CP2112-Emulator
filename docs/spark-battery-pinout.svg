@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" role="img" aria-labelledby="title desc">
+  <title id="title">DJI Spark Battery Contact Assignment</title>
+  <desc id="desc">Schematic view of the six Spark battery contacts in the order C, minus, plus, plus, minus, D.</desc>
+  <style>
+    text { font-family: sans-serif; fill: #17212b; }
+    .battery { fill: #263238; stroke: #111820; stroke-width: 4; }
+    .contact { stroke: #d6a84f; stroke-width: 12; stroke-linecap: round; }
+    .line { stroke: #168aad; stroke-width: 3; }
+    .power { stroke: #d1495b; stroke-width: 3; }
+    .label { font-size: 25px; font-weight: 700; }
+    .small { font-size: 18px; }
+  </style>
+  <rect width="900" height="1200" fill="#eef4f7"/>
+  <text x="45" y="55" font-size="30" font-weight="700">DJI Spark Battery - Contact Side</text>
+  <text x="45" y="90" class="small">Contact-side view: C | - | + | + | - | D</text>
+  <rect class="battery" x="245" y="150" width="410" height="840" rx="28"/>
+  <rect x="285" y="190" width="330" height="760" rx="12" fill="#37474f"/>
+  <text x="343" y="220" fill="#eef4f7" font-size="34" font-weight="700">DJI SPARK</text>
+  <rect x="275" y="320" width="350" height="65" rx="8" fill="#111820"/>
+  <line class="contact" x1="291" y1="352" x2="319" y2="352"/>
+  <line class="contact" x1="349" y1="352" x2="377" y2="352"/>
+  <line class="contact" x1="407" y1="352" x2="435" y2="352"/>
+  <line class="contact" x1="465" y1="352" x2="493" y2="352"/>
+  <line class="contact" x1="523" y1="352" x2="551" y2="352"/>
+  <line class="contact" x1="581" y1="352" x2="609" y2="352"/>
+  <line class="line" x1="305" y1="352" x2="305" y2="285"/>
+  <line class="power" x1="363" y1="352" x2="363" y2="285"/>
+  <line class="power" x1="421" y1="352" x2="421" y2="285"/>
+  <line class="power" x1="479" y1="352" x2="479" y2="285"/>
+  <line class="power" x1="537" y1="352" x2="537" y2="285"/>
+  <line class="line" x1="595" y1="352" x2="595" y2="285"/>
+  <text class="label" x="294" y="265">C</text>
+  <text class="label" x="355" y="265">-</text>
+  <text class="label" x="413" y="265">+</text>
+  <text class="label" x="471" y="265">+</text>
+  <text class="label" x="531" y="265">-</text>
+  <text class="label" x="585" y="265">D</text>
+  <text class="small" x="45" y="1055"><tspan font-weight="700">C = SCL / Clock</tspan>   |   <tspan font-weight="700">D = SDA / Data</tspan></text>
+  <text class="small" x="45" y="1100">Not to scale. Verify the contact side and polarity before connecting.</text>
+  <text class="small" x="45" y="1145">Never identify battery contacts by trial and error or short-circuiting.</text>
+</svg>
